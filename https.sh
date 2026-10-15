@@ -117,8 +117,9 @@ fi
 
 if active ufw && $SUDO ufw status | grep -q "Status: active"; then
   echo "== ufw: 80 and $HPORT"
-  $SUDO ufw allow 80/tcp comment "acme $NAME" >/dev/null
-  $SUDO ufw allow "$HPORT"/tcp comment "$NAME" >/dev/null
+  rules="$($SUDO ufw status)"  # an existing rule is left alone: "allow" again would overwrite its comment
+  echo "$rules" | grep -qE "^80/tcp +ALLOW" || $SUDO ufw allow 80/tcp comment "acme $NAME" >/dev/null
+  echo "$rules" | grep -qE "^$HPORT/tcp +ALLOW" || $SUDO ufw allow "$HPORT"/tcp comment "$NAME" >/dev/null
 fi
 
 if [ "$KIND" = nginx ]; then
