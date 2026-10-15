@@ -1045,3 +1045,18 @@ class ContainerIssueTest(unittest.TestCase):
         # an older probe without dk_why still works (names only)
         self.assertEqual(srv.bad_containers({"dk_bad": "worker"}), [("worker", "")])
         self.assertEqual(srv.container_issue("worker", "", t), "worker")
+
+
+class OldPythonTimeFormatsTest(unittest.TestCase):
+    """Formats Python 3.10's fromisoformat rejects: journald's +0200 and short fractions from restic."""
+
+    def test_journald_offset_without_colon(self):
+        from vps_director import security
+        self.assertEqual(security.login_time("2026-10-10T12:00:00+0200 h sshd[1]: Accepted", 0),
+                         security.login_time("2026-10-10T12:00:00+02:00 h sshd[1]: Accepted", 0))
+        self.assertIsNotNone(security.login_time("2026-10-10T12:00:00+0200 h sshd[1]: Accepted", 0))
+
+    def test_restic_short_fraction(self):
+        from vps_director import backups
+        self.assertAlmostEqual(backups.snapshot_time("2026-10-10T12:00:00.5Z"),
+                               backups.snapshot_time("2026-10-10T12:00:00Z") + 0.5)

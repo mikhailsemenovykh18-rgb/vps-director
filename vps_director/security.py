@@ -97,7 +97,10 @@ def login_time(line, now):
     if match:
         rest = line[match.end():]
         tz = re.match(r"(?:\.\d+)?([+-]\d{2}:?\d{2}|Z)?", rest).group(1)
-        text = "%sT%s%s" % (match.group(1), match.group(2), (tz or "").replace("Z", "+00:00"))
+        tz = (tz or "").replace("Z", "+00:00")
+        if len(tz) == 5:  # journald writes +0200; Python 3.10's fromisoformat wants +02:00
+            tz = tz[:3] + ":" + tz[3:]
+        text = "%sT%s%s" % (match.group(1), match.group(2), tz)
         try:
             when = datetime.datetime.fromisoformat(text)
         except ValueError:

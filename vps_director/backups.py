@@ -207,6 +207,8 @@ def snapshot_time(text):
     if not match:
         return None
     frac = (match.group(2) or "")[:7]
+    if frac:  # Python 3.10's fromisoformat takes only 3 or 6 digits
+        frac = frac.ljust(7, "0")
     try:
         return datetime.datetime.fromisoformat(match.group(1) + frac + (match.group(3) or "Z").replace("Z", "+00:00")).timestamp()
     except ValueError:
