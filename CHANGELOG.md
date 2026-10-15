@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-10-15
+
+- Python 3.10 (Ubuntu 22.04): SSH logins from journald (`+0200` offsets) were not read, so new-login
+  alerts never fired; restic times with short fractions were dropped. Both fixed.
+- `https.sh` leaves existing ufw rules alone.
+- Tests run on GitHub Actions for Python 3.10–3.13.
+
 ## 1.0.0 — 2026-10-15
 
 First public release.
