@@ -611,6 +611,10 @@ MEMINFO = "/proc/meminfo"
 DF_SKIP = ["-x", "tmpfs", "-x", "devtmpfs", "-x", "overlay", "-x", "squashfs"]
 
 
+START_WAIT = 90   # seconds an engine may stay silent before it counts as "did not start"
+NO_START = "no_start"
+
+
 def sh(cmd, timeout=20):
     """stdout of a shell command line (stderr is never data), '' on failure or timeout."""
     try:
@@ -1004,9 +1008,20 @@ class Director:
         timer = threading.Timer(self.cfg.timeout, kill_tree, (proc, killed))
         timer.daemon = True
         timer.start()
+        # an engine that is not logged in can sit silent until TIMEOUT: a started one speaks at once
+        heard, mute = threading.Event(), threading.Event()
+
+        def silent_start():
+            if not heard.is_set():
+                mute.set()
+                kill_tree(proc, killed)
+        watch = threading.Timer(START_WAIT, silent_start)
+        watch.daemon = True
+        watch.start()
         try:
             self.tg.typing(chat)
             for line in read_lines(proc):
+                heard.set()
                 try:
                     progressed = collector.feed(line)
                 except Exception as exc:  # noqa: BLE001  — one bad line must not end the run
@@ -1028,11 +1043,12 @@ class Director:
             raise
         finally:
             timer.cancel()
+            watch.cancel()
             proc.stdout.close()
         err_reader.join(5)  # stderr may still be in flight after stdout closed
         if progress_id:
             self.tg.delete(chat, progress_id)
-        code = None if killed.is_set() else proc.returncode  # None: /stop or timeout
+        code = NO_START if mute.is_set() else None if killed.is_set() else proc.returncode  # None: /stop or timeout
         return code, b"".join(errbuf).decode("utf-8", "replace")
 
     def run_task(self, chat, key, prompt, tools, job=None):
@@ -1104,6 +1120,10 @@ class Director:
         col = ClaudeStream()
         code, err = self.stream(chat, claude_args(self.cfg, sess, tools), col, prompt)
         if col.result is None:
+            if code == NO_START:
+                self.finish_session(key, sess)
+                self.say(chat, self.cfg.t("no_start", engine="Claude", sec=START_WAIT, login="claude setup-token"), job)
+                return
             if code is None:
                 self.finish_session(key, sess)
                 self.say(chat, self.cfg.t("stopped"), job)
@@ -1143,6 +1163,8 @@ class Director:
         self.finish_session(key, sess, done=True)
         if answer:
             self.say(chat, answer, job)
+        elif code == NO_START:
+            self.say(chat, self.cfg.t("no_start", engine="Codex", sec=START_WAIT, login="codex login"), job)
         elif code is None:
             self.say(chat, self.cfg.t("stopped"), job)
         else:

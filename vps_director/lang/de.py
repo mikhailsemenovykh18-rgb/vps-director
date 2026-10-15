@@ -16,7 +16,7 @@ TEXTS = {
         "security": "Sicherheitsprüfung der Server; /security accept", "sites": "laufen die Websites: Status, Zertifikate, Domains",
         "backups": "sind die Backups frisch; /backups verify [Name]",
     },
-    "queued": "⏳ In der Warteschlange (davor: {n}).", "working": "⏳ Arbeite…", "stopped": "⏹ Gestoppt.", "nothing_running": "Es läuft nichts.",
+    "queued": "⏳ In der Warteschlange (davor: {n}).", "working": "⏳ Arbeite…", "stopped": "⏹ Gestoppt.", "no_start": "⚠️ {engine} ist nicht gestartet: {sec} s lang kein Wort. Meist ist es unter diesem Benutzer nicht angemeldet. Führe auf dem Server einmal «{login}» als dieser Benutzer aus und sende die Aufgabe erneut.", "nothing_running": "Es läuft nichts.",
     "queue_cleared": " Warteschlange geleert ({n}).", "only": "Hier verfügbar: {cmds}. Alles andere einfach als Text schreiben.",
     "need_perm": "🔐 Ich brauche deine Erlaubnis:\n{what}\n\n„Erlauben“ gewährt genau das, für einen Durchgang:\n{rules}",
     "perm_wild": "🔐 Das enthält „*“, das eine Berechtigungsregel als Platzhalter verstehen würde — es zu erlauben, würde mehr erlauben, als du siehst, daher gibt es keinen „Erlauben“-Knopf:\n{what}\n\nWenn du einverstanden bist, gib dieser Sitzung für die Aufgabe Vollzugriff (/full) oder führe es selbst aus.",

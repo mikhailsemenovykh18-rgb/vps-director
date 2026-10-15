@@ -16,7 +16,7 @@ TEXTS = {
         "security": "checagem de segurança dos servidores; /security accept", "sites": "os sites estão no ar: status, certificados, domínios",
         "backups": "os backups estão em dia; /backups verify [nome]",
     },
-    "queued": "⏳ Na fila (à frente: {n}).", "working": "⏳ Trabalhando…", "stopped": "⏹ Parado.", "nothing_running": "Nada em execução.",
+    "queued": "⏳ Na fila (à frente: {n}).", "working": "⏳ Trabalhando…", "stopped": "⏹ Parado.", "no_start": "⚠️ {engine} não iniciou: nenhuma palavra em {sec} s. Normalmente não fez login com este usuário. Rode uma vez «{login}» no servidor com este usuário e envie a tarefa de novo.", "nothing_running": "Nada em execução.",
     "queue_cleared": " Fila limpa ({n}).", "only": "Disponível aqui: {cmds}. O resto, é só escrever como texto.",
     "need_perm": "🔐 Preciso da sua permissão:\n{what}\n\n«Permitir» concede exatamente isto, por uma rodada:\n{rules}",
     "perm_wild": "🔐 Isto contém «*», que uma regra de permissão trataria como curinga — permitir liberaria mais do que você vê, então não há botão «Permitir»:\n{what}\n\nSe concordar, dê acesso total a esta sessão para esta tarefa (/full) ou execute você mesmo.",

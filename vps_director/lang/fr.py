@@ -16,7 +16,7 @@ TEXTS = {
         "security": "contrôle de sécurité des serveurs ; /security accept", "sites": "les sites fonctionnent-ils : état, certificats, domaines",
         "backups": "les sauvegardes sont-elles à jour ; /backups verify [nom]",
     },
-    "queued": "⏳ En file d’attente (avant : {n}).", "working": "⏳ Je travaille…", "stopped": "⏹ Arrêté.", "nothing_running": "Rien n’est en cours.",
+    "queued": "⏳ En file d’attente (avant : {n}).", "working": "⏳ Je travaille…", "stopped": "⏹ Arrêté.", "no_start": "⚠️ {engine} n’a pas démarré : aucun mot en {sec} s. En général, il n’est pas connecté sous cet utilisateur. Lance une fois « {login} » sur le serveur avec cet utilisateur, puis renvoie la tâche.", "nothing_running": "Rien n’est en cours.",
     "queue_cleared": " File vidée ({n}).", "only": "Disponible ici : {cmds}. Pour le reste, écrivez simplement en texte.",
     "need_perm": "🔐 J’ai besoin de votre autorisation :\n{what}\n\n« Autoriser » accorde exactement ceci, pour un tour :\n{rules}",
     "perm_wild": "🔐 Ceci contient « * », qu’une règle d’autorisation traiterait comme un joker — l’autoriser permettrait plus que ce que vous voyez, donc pas de bouton « Autoriser » :\n{what}\n\nSi vous êtes d’accord, donnez à cette session l’accès total pour cette tâche (/full) ou lancez-le vous-même.",

@@ -729,3 +729,20 @@ class CodexRateTest(unittest.TestCase):
         got = terminal.codex_rate(home)
         self.assertEqual((got["five"], got["week"], got["plan"]), (64.0, 57.0, "plus"))
         self.assertIsNone(terminal.codex_rate(tempfile.mkdtemp()))
+
+
+class SilentStartTest(Base):
+    """An engine that prints nothing (e.g. not logged in) is stopped after START_WAIT with a login hint."""
+
+    def test_silent_engine_is_stopped(self):
+        with mock.patch.object(director, "START_WAIT", 0.5):
+            code, _ = self.d.stream(OWNER, ["sleep", "30"], director.ClaudeStream(), "")
+        self.assertEqual(code, director.NO_START)
+
+    def test_talking_engine_is_not_cut(self):
+        with mock.patch.object(director, "START_WAIT", 0.5):
+            code, _ = self.d.stream(OWNER, ["sh", "-c", "echo '{}'; sleep 1"], director.ClaudeStream(), "")
+        self.assertEqual(code, 0)
+
+    def test_hint_names_the_login_command(self):
+        self.assertIn("claude setup-token", self.d.cfg.t("no_start", engine="Claude", sec=90, login="claude setup-token"))
