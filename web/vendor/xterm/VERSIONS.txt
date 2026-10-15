@@ -1,0 +1,14 @@
+xterm.js, vendored unchanged from the npm registry (MIT, see LICENSE.txt; the addons carry the same
+licence text from the same authors). No CDN is used: the CSP allows scripts and styles from 'self' only.
+
+package                version  file             sha256
+@xterm/xterm           5.5.0    xterm.js         1f991ac3b4b283ebf96e60ae23a00a52765dd3a2e46fa6fdda9f1aab032f7495
+@xterm/xterm           5.5.0    xterm.css        ba8e6985669488981ccf40c0cefe3aba80722cb6c92de7ad628b0bd717faf2b6
+@xterm/addon-fit       0.10.0   addon-fit.js     bdaefa370b1bfc42ee88d46fe6072400902a4d4b2d45cd93438dda9b23c97089
+@xterm/addon-canvas    0.7.0    addon-canvas.js  7b3e904d5bec98b54d26674994cf994396c4af0971010ffd0d4983229b65d933
+
+Why the canvas renderer: xterm's default DOM renderer injects <style> elements, which a CSP without
+'unsafe-inline' blocks. The canvas addon draws on <canvas> and needs no inline styles.
+
+To update: npm pack @xterm/xterm@<v> @xterm/addon-fit@<v> @xterm/addon-canvas@<v>, copy lib/*.js and
+css/xterm.css here, update this table (sha256sum *.js *.css).

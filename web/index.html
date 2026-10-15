@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f3f5f9">
+<meta name="referrer" content="no-referrer">
+<title>VPS Director</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preload" href="vendor/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="theme.js"></script>
+<script src="i18n.js" defer></script>
+<script src="icons.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<main id="app"></main>
+<div class="tabbar" id="tabbar" hidden>
+  <nav aria-label="Sections">
+    <a href="#/" data-tab="servers"></a>
+    <a href="#/health" data-tab="health"></a>
+    <a href="#/jobs" data-tab="jobs"></a>
+    <a href="#/settings" data-tab="settings"></a>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="note">VPS Director needs JavaScript.</p></noscript>
+</body>
+</html>

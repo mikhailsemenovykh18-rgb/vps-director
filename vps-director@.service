@@ -1,0 +1,16 @@
+[Unit]
+Description=VPS Director (%i)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 __DIRECTOR__ run --instance %i
+Environment=__PATH__
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

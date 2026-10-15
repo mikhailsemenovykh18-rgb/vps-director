@@ -1,0 +1,6 @@
+[
+  {"ssh": "", "name": "main", "main": true, "where": "Frankfurt", "role": "this bot, the shop"},
+  {"ssh": "web", "name": "web", "where": "Amsterdam", "role": "landing pages",
+   "hosting_paid_until": "2026-11-01",
+   "ignore_ports": [10904, "10900-10999"]}
+]

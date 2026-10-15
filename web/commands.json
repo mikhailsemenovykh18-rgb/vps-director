@@ -1,0 +1,2586 @@
+{
+ "version": 1,
+ "about": "Curated command knowledge for the console assistant (web/assistant.js): descriptions in en/ru, subcommands (sub), flags and ready one-liners (examples). Purely local, never executed.",
+ "commands": {
+  "systemctl": {
+   "en": "services: start, stop, status",
+   "ru": "службы: запуск, остановка, состояние",
+   "sub": {
+    "status": {
+     "en": "is a service running, last log lines",
+     "ru": "работает ли служба, последние строки журнала",
+     "flags": {
+      "--no-pager": {
+       "en": "print everything, no pager",
+       "ru": "вывести всё без постраничного просмотра"
+      }
+     }
+    },
+    "start": {
+     "en": "start a service",
+     "ru": "запустить службу"
+    },
+    "stop": {
+     "en": "stop a service",
+     "ru": "остановить службу"
+    },
+    "restart": {
+     "en": "stop and start a service",
+     "ru": "перезапустить службу"
+    },
+    "reload": {
+     "en": "re-read the config without a restart",
+     "ru": "перечитать настройки без перезапуска"
+    },
+    "enable": {
+     "en": "start at boot",
+     "ru": "запускать при загрузке",
+     "flags": {
+      "--now": {
+       "en": "and start it now",
+       "ru": "и запустить сейчас"
+      }
+     }
+    },
+    "disable": {
+     "en": "do not start at boot",
+     "ru": "не запускать при загрузке",
+     "flags": {
+      "--now": {
+       "en": "and stop it now",
+       "ru": "и остановить сейчас"
+      }
+     }
+    },
+    "is-active": {
+     "en": "prints active / inactive",
+     "ru": "печатает active / inactive"
+    },
+    "is-enabled": {
+     "en": "starts at boot or not",
+     "ru": "запускается ли при загрузке"
+    },
+    "list-units": {
+     "en": "loaded units",
+     "ru": "загруженные юниты",
+     "flags": {
+      "--failed": {
+       "en": "only failed ones",
+       "ru": "только упавшие"
+      },
+      "--type=service": {
+       "en": "only services",
+       "ru": "только службы"
+      }
+     }
+    },
+    "list-timers": {
+     "en": "scheduled timers and their next run",
+     "ru": "таймеры и их следующий запуск",
+     "flags": {
+      "--all": {
+       "en": "inactive ones too",
+       "ru": "и неактивные"
+      }
+     }
+    },
+    "--failed": {
+     "en": "services that failed",
+     "ru": "упавшие службы"
+    },
+    "daemon-reload": {
+     "en": "re-read unit files after editing them",
+     "ru": "перечитать файлы юнитов после правки"
+    },
+    "cat": {
+     "en": "show a unit file",
+     "ru": "показать файл юнита"
+    },
+    "edit": {
+     "en": "override a unit's settings",
+     "ru": "переопределить настройки юнита"
+    },
+    "show": {
+     "en": "all properties of a unit",
+     "ru": "все свойства юнита",
+     "flags": {
+      "-p": {
+       "en": "only this property",
+       "ru": "только это свойство"
+      }
+     }
+    },
+    "mask": {
+     "en": "forbid starting a unit at all",
+     "ru": "полностью запретить запуск юнита"
+    },
+    "unmask": {
+     "en": "undo mask",
+     "ru": "отменить mask"
+    },
+    "reboot": {
+     "en": "reboot the machine",
+     "ru": "перезагрузить машину"
+    },
+    "poweroff": {
+     "en": "power the machine off",
+     "ru": "выключить машину"
+    }
+   },
+   "examples": [
+    {
+     "line": "systemctl --failed",
+     "en": "what failed",
+     "ru": "что упало"
+    },
+    {
+     "line": "systemctl list-timers --all",
+     "en": "scheduled timers",
+     "ru": "все таймеры"
+    }
+   ]
+  },
+  "journalctl": {
+   "en": "system and service logs",
+   "ru": "журналы системы и служб",
+   "flags": {
+    "-u": {
+     "en": "only this unit, e.g. -u nginx",
+     "ru": "только этот юнит, например -u nginx"
+    },
+    "-f": {
+     "en": "follow new lines",
+     "ru": "следить за новыми строками"
+    },
+    "-n": {
+     "en": "last N lines, e.g. -n 100",
+     "ru": "последние N строк, например -n 100"
+    },
+    "-e": {
+     "en": "jump to the end",
+     "ru": "сразу в конец"
+    },
+    "-b": {
+     "en": "since this boot (-b -1: the previous one)",
+     "ru": "с этой загрузки (-b -1 — с прошлой)"
+    },
+    "-p": {
+     "en": "priority: -p err shows errors only",
+     "ru": "важность: -p err — только ошибки"
+    },
+    "-k": {
+     "en": "kernel messages",
+     "ru": "сообщения ядра"
+    },
+    "-x": {
+     "en": "explain messages",
+     "ru": "пояснения к сообщениям"
+    },
+    "--since": {
+     "en": "e.g. --since '1 hour ago' or 'today'",
+     "ru": "например --since '1 hour ago' или 'today'"
+    },
+    "--until": {
+     "en": "up to a time",
+     "ru": "до момента"
+    },
+    "--no-pager": {
+     "en": "print everything",
+     "ru": "вывести всё"
+    },
+    "--disk-usage": {
+     "en": "how much space the journal takes",
+     "ru": "сколько места занимает журнал"
+    },
+    "--vacuum-size=": {
+     "en": "shrink the journal, e.g. 500M",
+     "ru": "ужать журнал, например до 500M"
+    },
+    "--vacuum-time=": {
+     "en": "drop entries older than, e.g. 2weeks",
+     "ru": "удалить записи старше, например 2weeks"
+    },
+    "-o": {
+     "en": "output format: short-iso, json, cat",
+     "ru": "формат: short-iso, json, cat"
+    }
+   },
+   "examples": [
+    {
+     "line": "journalctl -u nginx -f",
+     "en": "follow one service's log",
+     "ru": "следить за журналом службы"
+    },
+    {
+     "line": "journalctl -p err -b",
+     "en": "errors since boot",
+     "ru": "ошибки с загрузки"
+    },
+    {
+     "line": "journalctl --since '1 hour ago'",
+     "en": "the last hour",
+     "ru": "последний час"
+    },
+    {
+     "line": "journalctl --disk-usage",
+     "en": "journal size",
+     "ru": "размер журнала"
+    }
+   ]
+  },
+  "docker": {
+   "en": "containers",
+   "ru": "контейнеры",
+   "sub": {
+    "ps": {
+     "en": "running containers",
+     "ru": "запущенные контейнеры",
+     "flags": {
+      "-a": {
+       "en": "stopped ones too",
+       "ru": "и остановленные"
+      },
+      "-q": {
+       "en": "ids only",
+       "ru": "только id"
+      },
+      "--format": {
+       "en": "e.g. '{{.Names}} {{.Status}}'",
+       "ru": "например '{{.Names}} {{.Status}}'"
+      }
+     }
+    },
+    "logs": {
+     "en": "a container's output",
+     "ru": "вывод контейнера",
+     "flags": {
+      "-f": {
+       "en": "follow",
+       "ru": "следить"
+      },
+      "--tail": {
+       "en": "last N lines",
+       "ru": "последние N строк"
+      },
+      "--since": {
+       "en": "e.g. --since 10m",
+       "ru": "например --since 10m"
+      },
+      "-t": {
+       "en": "with timestamps",
+       "ru": "с отметками времени"
+      }
+     }
+    },
+    "restart": {
+     "en": "restart a container",
+     "ru": "перезапустить контейнер"
+    },
+    "stop": {
+     "en": "stop a container",
+     "ru": "остановить контейнер"
+    },
+    "start": {
+     "en": "start a stopped container",
+     "ru": "запустить остановленный контейнер"
+    },
+    "exec": {
+     "en": "run a command inside a container",
+     "ru": "выполнить команду внутри контейнера",
+     "flags": {
+      "-it": {
+       "en": "interactive terminal (… sh)",
+       "ru": "интерактивный терминал (… sh)"
+      },
+      "-u": {
+       "en": "as this user",
+       "ru": "от имени пользователя"
+      }
+     }
+    },
+    "inspect": {
+     "en": "all details of a container or image",
+     "ru": "все подробности о контейнере или образе",
+     "flags": {
+      "--format": {
+       "en": "pick one field",
+       "ru": "выбрать одно поле"
+      }
+     }
+    },
+    "stats": {
+     "en": "live CPU / memory per container",
+     "ru": "процессор и память по контейнерам вживую",
+     "flags": {
+      "--no-stream": {
+       "en": "one snapshot",
+       "ru": "один снимок"
+      }
+     }
+    },
+    "images": {
+     "en": "downloaded images",
+     "ru": "скачанные образы"
+    },
+    "pull": {
+     "en": "download an image",
+     "ru": "скачать образ"
+    },
+    "rm": {
+     "en": "remove a container",
+     "ru": "удалить контейнер",
+     "flags": {
+      "-f": {
+       "en": "even a running one",
+       "ru": "даже запущенный"
+      }
+     }
+    },
+    "rmi": {
+     "en": "remove an image",
+     "ru": "удалить образ"
+    },
+    "run": {
+     "en": "start a new container",
+     "ru": "запустить новый контейнер",
+     "flags": {
+      "-d": {
+       "en": "in the background",
+       "ru": "в фоне"
+      },
+      "--rm": {
+       "en": "remove when it stops",
+       "ru": "удалить после остановки"
+      },
+      "-it": {
+       "en": "interactive",
+       "ru": "интерактивно"
+      },
+      "-p": {
+       "en": "publish a port host:container",
+       "ru": "проброс порта хост:контейнер"
+      },
+      "-v": {
+       "en": "mount a volume",
+       "ru": "подключить том"
+      },
+      "--name": {
+       "en": "container name",
+       "ru": "имя контейнера"
+      },
+      "-e": {
+       "en": "environment variable",
+       "ru": "переменная окружения"
+      },
+      "--restart": {
+       "en": "unless-stopped / always",
+       "ru": "unless-stopped / always"
+      }
+     }
+    },
+    "compose": {
+     "en": "multi-container projects (compose.yaml)",
+     "ru": "проекты из нескольких контейнеров (compose.yaml)",
+     "sub": {
+      "up": {
+       "en": "create and start the services",
+       "ru": "создать и запустить сервисы",
+       "flags": {
+        "-d": {
+         "en": "in the background",
+         "ru": "в фоне"
+        },
+        "--build": {
+         "en": "rebuild images first",
+         "ru": "сначала пересобрать образы"
+        },
+        "--force-recreate": {
+         "en": "recreate containers",
+         "ru": "пересоздать контейнеры"
+        },
+        "--remove-orphans": {
+         "en": "remove containers not in the file",
+         "ru": "удалить контейнеры, которых нет в файле"
+        }
+       }
+      },
+      "down": {
+       "en": "stop and remove the services",
+       "ru": "остановить и удалить сервисы",
+       "flags": {
+        "-v": {
+         "en": "and their volumes — data is lost!",
+         "ru": "и их тома — данные пропадут!"
+        },
+        "--remove-orphans": {
+         "en": "remove containers not in the file",
+         "ru": "удалить контейнеры, которых нет в файле"
+        }
+       }
+      },
+      "ps": {
+       "en": "services of this project",
+       "ru": "сервисы этого проекта",
+       "flags": {
+        "-a": {
+         "en": "stopped ones too",
+         "ru": "и остановленные"
+        }
+       }
+      },
+      "logs": {
+       "en": "logs of the services",
+       "ru": "журналы сервисов",
+       "flags": {
+        "-f": {
+         "en": "follow",
+         "ru": "следить"
+        },
+        "--tail": {
+         "en": "last N lines, e.g. --tail 100",
+         "ru": "последние N строк, например --tail 100"
+        },
+        "-t": {
+         "en": "with timestamps",
+         "ru": "с отметками времени"
+        }
+       }
+      },
+      "restart": {
+       "en": "restart services",
+       "ru": "перезапустить сервисы"
+      },
+      "stop": {
+       "en": "stop services",
+       "ru": "остановить сервисы"
+      },
+      "start": {
+       "en": "start stopped services",
+       "ru": "запустить остановленные"
+      },
+      "pull": {
+       "en": "download newer images",
+       "ru": "скачать новые образы"
+      },
+      "build": {
+       "en": "build images",
+       "ru": "собрать образы",
+       "flags": {
+        "--no-cache": {
+         "en": "from scratch",
+         "ru": "с нуля"
+        },
+        "--pull": {
+         "en": "pull base images",
+         "ru": "обновить базовые образы"
+        }
+       }
+      },
+      "exec": {
+       "en": "run a command in a running service",
+       "ru": "выполнить команду в работающем сервисе",
+       "flags": {
+        "-it": {
+         "en": "interactive terminal",
+         "ru": "интерактивный терминал"
+        }
+       }
+      },
+      "run": {
+       "en": "one-off container for a service",
+       "ru": "разовый контейнер сервиса",
+       "flags": {
+        "--rm": {
+         "en": "remove it afterwards",
+         "ru": "удалить после"
+        }
+       }
+      },
+      "config": {
+       "en": "the final config after variables",
+       "ru": "итоговый конфиг после подстановки переменных"
+      },
+      "top": {
+       "en": "processes in the services",
+       "ru": "процессы в сервисах"
+      }
+     }
+    },
+    "system": {
+     "en": "disk usage and cleanup",
+     "ru": "место на диске и уборка",
+     "sub": {
+      "df": {
+       "en": "space used by images, containers, volumes",
+       "ru": "место под образы, контейнеры, тома"
+      },
+      "prune": {
+       "en": "remove unused data",
+       "ru": "удалить неиспользуемое",
+       "flags": {
+        "-a": {
+         "en": "all unused images too",
+         "ru": "и все неиспользуемые образы"
+        },
+        "--volumes": {
+         "en": "unused volumes too — data!",
+         "ru": "и неиспользуемые тома — данные!"
+        },
+        "-f": {
+         "en": "do not ask",
+         "ru": "без вопроса"
+        }
+       }
+      }
+     }
+    },
+    "image": {
+     "en": "manage images",
+     "ru": "образы",
+     "sub": {
+      "prune": {
+       "en": "remove dangling images",
+       "ru": "удалить висящие образы",
+       "flags": {
+        "-a": {
+         "en": "all unused",
+         "ru": "все неиспользуемые"
+        }
+       }
+      },
+      "ls": {
+       "en": "list images",
+       "ru": "список образов"
+      }
+     }
+    },
+    "volume": {
+     "en": "manage volumes",
+     "ru": "тома",
+     "sub": {
+      "ls": {
+       "en": "list volumes",
+       "ru": "список томов"
+      },
+      "inspect": {
+       "en": "where a volume lives",
+       "ru": "где лежит том"
+      },
+      "prune": {
+       "en": "remove unused volumes — data!",
+       "ru": "удалить неиспользуемые тома — данные!"
+      },
+      "rm": {
+       "en": "remove a volume — data!",
+       "ru": "удалить том — данные!"
+      }
+     }
+    },
+    "network": {
+     "en": "manage networks",
+     "ru": "сети",
+     "sub": {
+      "ls": {
+       "en": "list networks",
+       "ru": "список сетей"
+      },
+      "inspect": {
+       "en": "details of a network",
+       "ru": "подробности о сети"
+      }
+     }
+    },
+    "cp": {
+     "en": "copy files to / from a container",
+     "ru": "копировать файлы в контейнер и обратно"
+    },
+    "top": {
+     "en": "processes in a container",
+     "ru": "процессы в контейнере"
+    },
+    "update": {
+     "en": "change limits / restart policy",
+     "ru": "изменить лимиты или политику перезапуска",
+     "flags": {
+      "--restart": {
+       "en": "unless-stopped / always / no",
+       "ru": "unless-stopped / always / no"
+      }
+     }
+    },
+    "version": {
+     "en": "client and server versions",
+     "ru": "версии клиента и сервера"
+    },
+    "info": {
+     "en": "system-wide information",
+     "ru": "общая информация"
+    }
+   },
+   "examples": [
+    {
+     "line": "docker ps --format '{{.Names}}\\t{{.Status}}'",
+     "en": "names and states",
+     "ru": "имена и состояния"
+    },
+    {
+     "line": "docker logs -f --tail 100",
+     "en": "last 100 lines and follow",
+     "ru": "последние 100 строк и дальше"
+    },
+    {
+     "line": "docker system df",
+     "en": "disk used by Docker",
+     "ru": "сколько места занял Docker"
+    },
+    {
+     "line": "docker compose up -d",
+     "en": "start the project in the background",
+     "ru": "поднять проект в фоне"
+    }
+   ]
+  },
+  "docker-compose": {
+   "en": "old compose (v1) — prefer 'docker compose'",
+   "ru": "старый compose (v1) — лучше 'docker compose'",
+   "sub": {
+    "up": {
+     "en": "create and start the services",
+     "ru": "создать и запустить сервисы",
+     "flags": {
+      "-d": {
+       "en": "in the background",
+       "ru": "в фоне"
+      },
+      "--build": {
+       "en": "rebuild images first",
+       "ru": "сначала пересобрать образы"
+      },
+      "--force-recreate": {
+       "en": "recreate containers",
+       "ru": "пересоздать контейнеры"
+      },
+      "--remove-orphans": {
+       "en": "remove containers not in the file",
+       "ru": "удалить контейнеры, которых нет в файле"
+      }
+     }
+    },
+    "down": {
+     "en": "stop and remove the services",
+     "ru": "остановить и удалить сервисы",
+     "flags": {
+      "-v": {
+       "en": "and their volumes — data is lost!",
+       "ru": "и их тома — данные пропадут!"
+      },
+      "--remove-orphans": {
+       "en": "remove containers not in the file",
+       "ru": "удалить контейнеры, которых нет в файле"
+      }
+     }
+    },
+    "ps": {
+     "en": "services of this project",
+     "ru": "сервисы этого проекта",
+     "flags": {
+      "-a": {
+       "en": "stopped ones too",
+       "ru": "и остановленные"
+      }
+     }
+    },
+    "logs": {
+     "en": "logs of the services",
+     "ru": "журналы сервисов",
+     "flags": {
+      "-f": {
+       "en": "follow",
+       "ru": "следить"
+      },
+      "--tail": {
+       "en": "last N lines, e.g. --tail 100",
+       "ru": "последние N строк, например --tail 100"
+      },
+      "-t": {
+       "en": "with timestamps",
+       "ru": "с отметками времени"
+      }
+     }
+    },
+    "restart": {
+     "en": "restart services",
+     "ru": "перезапустить сервисы"
+    },
+    "stop": {
+     "en": "stop services",
+     "ru": "остановить сервисы"
+    },
+    "start": {
+     "en": "start stopped services",
+     "ru": "запустить остановленные"
+    },
+    "pull": {
+     "en": "download newer images",
+     "ru": "скачать новые образы"
+    },
+    "build": {
+     "en": "build images",
+     "ru": "собрать образы",
+     "flags": {
+      "--no-cache": {
+       "en": "from scratch",
+       "ru": "с нуля"
+      },
+      "--pull": {
+       "en": "pull base images",
+       "ru": "обновить базовые образы"
+      }
+     }
+    },
+    "exec": {
+     "en": "run a command in a running service",
+     "ru": "выполнить команду в работающем сервисе",
+     "flags": {
+      "-it": {
+       "en": "interactive terminal",
+       "ru": "интерактивный терминал"
+      }
+     }
+    },
+    "run": {
+     "en": "one-off container for a service",
+     "ru": "разовый контейнер сервиса",
+     "flags": {
+      "--rm": {
+       "en": "remove it afterwards",
+       "ru": "удалить после"
+      }
+     }
+    },
+    "config": {
+     "en": "the final config after variables",
+     "ru": "итоговый конфиг после подстановки переменных"
+    },
+    "top": {
+     "en": "processes in the services",
+     "ru": "процессы в сервисах"
+    }
+   }
+  },
+  "git": {
+   "en": "version control",
+   "ru": "контроль версий",
+   "sub": {
+    "status": {
+     "en": "what changed",
+     "ru": "что изменилось",
+     "flags": {
+      "-s": {
+       "en": "short",
+       "ru": "кратко"
+      }
+     }
+    },
+    "pull": {
+     "en": "fetch and merge",
+     "ru": "забрать и слить изменения",
+     "flags": {
+      "--rebase": {
+       "en": "rebase instead of merge",
+       "ru": "rebase вместо merge"
+      },
+      "--ff-only": {
+       "en": "only fast-forward",
+       "ru": "только перемотка"
+      }
+     }
+    },
+    "fetch": {
+     "en": "download without merging",
+     "ru": "скачать без слияния",
+     "flags": {
+      "--all": {
+       "en": "all remotes",
+       "ru": "все удалённые"
+      },
+      "--prune": {
+       "en": "drop deleted branches",
+       "ru": "убрать удалённые ветки"
+      }
+     }
+    },
+    "log": {
+     "en": "history",
+     "ru": "история",
+     "flags": {
+      "--oneline": {
+       "en": "one line per commit",
+       "ru": "строка на коммит"
+      },
+      "-n": {
+       "en": "last N",
+       "ru": "последние N"
+      },
+      "--graph": {
+       "en": "draw branches",
+       "ru": "рисовать ветки"
+      },
+      "-p": {
+       "en": "with changes",
+       "ru": "с изменениями"
+      }
+     }
+    },
+    "diff": {
+     "en": "unstaged changes",
+     "ru": "неподготовленные изменения",
+     "flags": {
+      "--stat": {
+       "en": "only a summary",
+       "ru": "только сводка"
+      },
+      "--cached": {
+       "en": "staged changes",
+       "ru": "подготовленные изменения"
+      }
+     }
+    },
+    "add": {
+     "en": "stage changes",
+     "ru": "подготовить изменения",
+     "flags": {
+      "-A": {
+       "en": "everything",
+       "ru": "всё"
+      },
+      "-p": {
+       "en": "pick hunks",
+       "ru": "по кусочкам"
+      }
+     }
+    },
+    "commit": {
+     "en": "record staged changes",
+     "ru": "записать подготовленное",
+     "flags": {
+      "-m": {
+       "en": "message",
+       "ru": "сообщение"
+      },
+      "--amend": {
+       "en": "change the last commit",
+       "ru": "изменить последний коммит"
+      }
+     }
+    },
+    "push": {
+     "en": "upload commits",
+     "ru": "отправить коммиты",
+     "flags": {
+      "-u": {
+       "en": "set upstream",
+       "ru": "запомнить ветку"
+      },
+      "--force-with-lease": {
+       "en": "safer force push",
+       "ru": "безопасная принудительная отправка"
+      }
+     }
+    },
+    "checkout": {
+     "en": "switch branch / restore files",
+     "ru": "сменить ветку или вернуть файлы",
+     "flags": {
+      "-b": {
+       "en": "new branch",
+       "ru": "новая ветка"
+      }
+     }
+    },
+    "switch": {
+     "en": "switch branch",
+     "ru": "сменить ветку",
+     "flags": {
+      "-c": {
+       "en": "create it",
+       "ru": "создать её"
+      }
+     }
+    },
+    "branch": {
+     "en": "list / create branches",
+     "ru": "ветки",
+     "flags": {
+      "-a": {
+       "en": "remote ones too",
+       "ru": "и удалённые"
+      },
+      "-d": {
+       "en": "delete merged",
+       "ru": "удалить слитую"
+      }
+     }
+    },
+    "stash": {
+     "en": "put changes aside",
+     "ru": "отложить изменения",
+     "sub": {
+      "pop": {
+       "en": "bring them back",
+       "ru": "вернуть"
+      },
+      "list": {
+       "en": "list stashes",
+       "ru": "список отложенного"
+      }
+     }
+    },
+    "reset": {
+     "en": "move HEAD / unstage",
+     "ru": "сдвинуть HEAD или убрать из подготовки",
+     "flags": {
+      "--hard": {
+       "en": "DISCARD local changes",
+       "ru": "ВЫБРОСИТЬ локальные изменения"
+      },
+      "--soft": {
+       "en": "keep changes staged",
+       "ru": "оставить изменения подготовленными"
+      }
+     }
+    },
+    "clone": {
+     "en": "copy a repository",
+     "ru": "скопировать репозиторий",
+     "flags": {
+      "--depth": {
+       "en": "shallow, e.g. --depth 1",
+       "ru": "неглубоко, например --depth 1"
+      }
+     }
+    },
+    "remote": {
+     "en": "remotes",
+     "ru": "удалённые репозитории",
+     "flags": {
+      "-v": {
+       "en": "with URLs",
+       "ru": "с адресами"
+      }
+     }
+    },
+    "show": {
+     "en": "one commit",
+     "ru": "один коммит",
+     "flags": {
+      "--stat": {
+       "en": "files only",
+       "ru": "только файлы"
+      }
+     }
+    },
+    "tag": {
+     "en": "tags",
+     "ru": "метки"
+    },
+    "clean": {
+     "en": "remove untracked files",
+     "ru": "удалить неотслеживаемые файлы",
+     "flags": {
+      "-n": {
+       "en": "dry run",
+       "ru": "только показать"
+      },
+      "-fd": {
+       "en": "files and folders — gone!",
+       "ru": "файлы и папки — безвозвратно!"
+      }
+     }
+    }
+   },
+   "examples": [
+    {
+     "line": "git log --oneline -n 20",
+     "en": "last 20 commits",
+     "ru": "последние 20 коммитов"
+    },
+    {
+     "line": "git pull --ff-only",
+     "en": "update without merges",
+     "ru": "обновить без слияний"
+    }
+   ]
+  },
+  "apt": {
+   "en": "packages (Debian / Ubuntu)",
+   "ru": "пакеты (Debian / Ubuntu)",
+   "sub": {
+    "update": {
+     "en": "refresh package lists",
+     "ru": "обновить списки пакетов"
+    },
+    "upgrade": {
+     "en": "install newer versions",
+     "ru": "поставить новые версии",
+     "flags": {
+      "-y": {
+       "en": "do not ask",
+       "ru": "без вопросов"
+      }
+     }
+    },
+    "full-upgrade": {
+     "en": "upgrade, may remove packages",
+     "ru": "обновить, может удалять пакеты"
+    },
+    "install": {
+     "en": "install packages",
+     "ru": "установить пакеты",
+     "flags": {
+      "-y": {
+       "en": "do not ask",
+       "ru": "без вопросов"
+      },
+      "--no-install-recommends": {
+       "en": "skip recommended",
+       "ru": "без рекомендуемых"
+      }
+     }
+    },
+    "remove": {
+     "en": "remove packages (keep config)",
+     "ru": "удалить пакеты (настройки останутся)"
+    },
+    "purge": {
+     "en": "remove packages and config",
+     "ru": "удалить пакеты вместе с настройками"
+    },
+    "autoremove": {
+     "en": "remove unneeded dependencies",
+     "ru": "удалить ненужные зависимости"
+    },
+    "search": {
+     "en": "find packages",
+     "ru": "найти пакеты"
+    },
+    "show": {
+     "en": "package details",
+     "ru": "подробности о пакете"
+    },
+    "list": {
+     "en": "list packages",
+     "ru": "список пакетов",
+     "flags": {
+      "--installed": {
+       "en": "installed only",
+       "ru": "только установленные"
+      },
+      "--upgradable": {
+       "en": "ones with updates",
+       "ru": "те, что можно обновить"
+      }
+     }
+    },
+    "policy": {
+     "en": "which version would be installed",
+     "ru": "какая версия будет установлена"
+    },
+    "clean": {
+     "en": "drop downloaded .deb files",
+     "ru": "удалить скачанные .deb"
+    }
+   },
+   "examples": [
+    {
+     "line": "apt update && apt list --upgradable",
+     "en": "what can be updated",
+     "ru": "что можно обновить"
+    }
+   ]
+  },
+  "apt-get": {
+   "en": "packages, script-friendly",
+   "ru": "пакеты, для скриптов",
+   "sub": {
+    "update": {
+     "en": "refresh package lists",
+     "ru": "обновить списки пакетов"
+    },
+    "upgrade": {
+     "en": "install newer versions",
+     "ru": "поставить новые версии",
+     "flags": {
+      "-y": {
+       "en": "do not ask",
+       "ru": "без вопросов"
+      }
+     }
+    },
+    "install": {
+     "en": "install packages",
+     "ru": "установить пакеты",
+     "flags": {
+      "-y": {
+       "en": "do not ask",
+       "ru": "без вопросов"
+      },
+      "--no-install-recommends": {
+       "en": "skip recommended",
+       "ru": "без рекомендуемых"
+      }
+     }
+    },
+    "remove": {
+     "en": "remove packages (keep config)",
+     "ru": "удалить пакеты (настройки останутся)"
+    },
+    "purge": {
+     "en": "remove packages and config",
+     "ru": "удалить пакеты вместе с настройками"
+    },
+    "autoremove": {
+     "en": "remove unneeded dependencies",
+     "ru": "удалить ненужные зависимости"
+    },
+    "clean": {
+     "en": "drop downloaded .deb files",
+     "ru": "удалить скачанные .deb"
+    }
+   }
+  },
+  "ufw": {
+   "en": "simple firewall",
+   "ru": "простой файрвол",
+   "sub": {
+    "status": {
+     "en": "rules and state",
+     "ru": "правила и состояние",
+     "flags": {
+      "verbose": {
+       "en": "with defaults",
+       "ru": "с политиками по умолчанию"
+      },
+      "numbered": {
+       "en": "numbered (for delete)",
+       "ru": "с номерами (для delete)"
+      }
+     }
+    },
+    "allow": {
+     "en": "allow a port / service, e.g. allow 443/tcp",
+     "ru": "разрешить порт или сервис, например allow 443/tcp"
+    },
+    "deny": {
+     "en": "block a port",
+     "ru": "закрыть порт"
+    },
+    "limit": {
+     "en": "allow with brute-force limit (ssh)",
+     "ru": "разрешить с защитой от перебора (ssh)"
+    },
+    "delete": {
+     "en": "delete a rule (by number from status numbered)",
+     "ru": "удалить правило (номер из status numbered)"
+    },
+    "enable": {
+     "en": "turn the firewall on — allow ssh first!",
+     "ru": "включить файрвол — сначала разрешите ssh!"
+    },
+    "disable": {
+     "en": "turn the firewall off",
+     "ru": "выключить файрвол"
+    },
+    "reload": {
+     "en": "reload rules",
+     "ru": "перечитать правила"
+    },
+    "reset": {
+     "en": "delete all rules and disable",
+     "ru": "удалить все правила и выключить"
+    },
+    "app": {
+     "en": "application profiles",
+     "ru": "профили приложений",
+     "sub": {
+      "list": {
+       "en": "known profiles",
+       "ru": "известные профили"
+      }
+     }
+    }
+   },
+   "examples": [
+    {
+     "line": "ufw status numbered",
+     "en": "rules with numbers",
+     "ru": "правила с номерами"
+    },
+    {
+     "line": "ufw allow 443/tcp",
+     "en": "open HTTPS",
+     "ru": "открыть HTTPS"
+    }
+   ]
+  },
+  "nginx": {
+   "en": "web server",
+   "ru": "веб-сервер",
+   "flags": {
+    "-t": {
+     "en": "test the config",
+     "ru": "проверить конфиг"
+    },
+    "-T": {
+     "en": "test and print the whole config",
+     "ru": "проверить и вывести весь конфиг"
+    },
+    "-s": {
+     "en": "signal: reload, stop, quit",
+     "ru": "сигнал: reload, stop, quit"
+    },
+    "-V": {
+     "en": "version and build options",
+     "ru": "версия и параметры сборки"
+    }
+   },
+   "examples": [
+    {
+     "line": "nginx -t && systemctl reload nginx",
+     "en": "check, then apply",
+     "ru": "проверить и применить"
+    }
+   ]
+  },
+  "caddy": {
+   "en": "web server with automatic HTTPS",
+   "ru": "веб-сервер с автоматическим HTTPS",
+   "sub": {
+    "validate": {
+     "en": "check a Caddyfile",
+     "ru": "проверить Caddyfile",
+     "flags": {
+      "--config": {
+       "en": "path",
+       "ru": "путь"
+      },
+      "--adapter": {
+       "en": "caddyfile",
+       "ru": "caddyfile"
+      }
+     }
+    },
+    "reload": {
+     "en": "apply a new config",
+     "ru": "применить новый конфиг",
+     "flags": {
+      "--config": {
+       "en": "path",
+       "ru": "путь"
+      }
+     }
+    },
+    "fmt": {
+     "en": "format a Caddyfile",
+     "ru": "отформатировать Caddyfile",
+     "flags": {
+      "--overwrite": {
+       "en": "in place",
+       "ru": "на месте"
+      }
+     }
+    },
+    "version": {
+     "en": "version",
+     "ru": "версия"
+    },
+    "list-modules": {
+     "en": "installed modules",
+     "ru": "установленные модули"
+    },
+    "run": {
+     "en": "run in the foreground",
+     "ru": "запустить на переднем плане"
+    },
+    "adapt": {
+     "en": "Caddyfile → JSON",
+     "ru": "Caddyfile → JSON"
+    }
+   },
+   "examples": [
+    {
+     "line": "caddy validate --config /etc/caddy/Caddyfile",
+     "en": "check the config",
+     "ru": "проверить конфиг"
+    }
+   ]
+  },
+  "ss": {
+   "en": "sockets: who listens where",
+   "ru": "сокеты: кто что слушает",
+   "flags": {
+    "-t": {
+     "en": "TCP",
+     "ru": "TCP"
+    },
+    "-u": {
+     "en": "UDP",
+     "ru": "UDP"
+    },
+    "-l": {
+     "en": "listening only",
+     "ru": "только слушающие"
+    },
+    "-n": {
+     "en": "numbers, no names",
+     "ru": "числа без имён"
+    },
+    "-p": {
+     "en": "with processes",
+     "ru": "с процессами"
+    },
+    "-s": {
+     "en": "summary",
+     "ru": "сводка"
+    },
+    "-tulpn": {
+     "en": "everything listening, with processes",
+     "ru": "всё, что слушает, с процессами"
+    }
+   },
+   "examples": [
+    {
+     "line": "ss -tulpn",
+     "en": "open ports and their programs",
+     "ru": "открытые порты и их программы"
+    }
+   ]
+  },
+  "df": {
+   "en": "free disk space",
+   "ru": "свободное место на дисках",
+   "flags": {
+    "-h": {
+     "en": "human sizes",
+     "ru": "понятные размеры"
+    },
+    "-i": {
+     "en": "inodes",
+     "ru": "иноды"
+    },
+    "-T": {
+     "en": "filesystem types",
+     "ru": "типы файловых систем"
+    }
+   },
+   "examples": [
+    {
+     "line": "df -h",
+     "en": "space per disk",
+     "ru": "место по дискам"
+    }
+   ]
+  },
+  "du": {
+   "en": "space taken by folders",
+   "ru": "сколько места занимают папки",
+   "flags": {
+    "-h": {
+     "en": "human sizes",
+     "ru": "понятные размеры"
+    },
+    "-s": {
+     "en": "one total per argument",
+     "ru": "итог на аргумент"
+    },
+    "-d": {
+     "en": "depth, e.g. -d 1",
+     "ru": "глубина, например -d 1"
+    },
+    "-x": {
+     "en": "stay on one disk",
+     "ru": "не выходить за диск"
+    }
+   },
+   "examples": [
+    {
+     "line": "du -xh -d 1 / | sort -h",
+     "en": "what fills the disk",
+     "ru": "что занимает диск"
+    },
+    {
+     "line": "du -sh * | sort -h",
+     "en": "sizes here, biggest last",
+     "ru": "размеры здесь, самые большие внизу"
+    }
+   ]
+  },
+  "tail": {
+   "en": "end of a file",
+   "ru": "конец файла",
+   "flags": {
+    "-f": {
+     "en": "follow new lines",
+     "ru": "следить за новыми строками"
+    },
+    "-F": {
+     "en": "follow across rotation",
+     "ru": "следить и после ротации"
+    },
+    "-n": {
+     "en": "last N lines",
+     "ru": "последние N строк"
+    }
+   },
+   "examples": [
+    {
+     "line": "tail -f /var/log/syslog",
+     "en": "follow the system log",
+     "ru": "следить за системным журналом"
+    }
+   ]
+  },
+  "head": {
+   "en": "start of a file",
+   "ru": "начало файла",
+   "flags": {
+    "-n": {
+     "en": "first N lines",
+     "ru": "первые N строк"
+    }
+   }
+  },
+  "grep": {
+   "en": "find lines matching a pattern",
+   "ru": "найти строки по шаблону",
+   "flags": {
+    "-i": {
+     "en": "ignore case",
+     "ru": "без учёта регистра"
+    },
+    "-r": {
+     "en": "in folders",
+     "ru": "по папкам"
+    },
+    "-n": {
+     "en": "line numbers",
+     "ru": "номера строк"
+    },
+    "-v": {
+     "en": "lines NOT matching",
+     "ru": "строки БЕЗ совпадения"
+    },
+    "-E": {
+     "en": "extended regex",
+     "ru": "расширенные регулярки"
+    },
+    "-c": {
+     "en": "count",
+     "ru": "посчитать"
+    },
+    "-l": {
+     "en": "file names only",
+     "ru": "только имена файлов"
+    },
+    "-o": {
+     "en": "only the match",
+     "ru": "только совпадение"
+    },
+    "-A": {
+     "en": "N lines after",
+     "ru": "N строк после"
+    },
+    "-B": {
+     "en": "N lines before",
+     "ru": "N строк до"
+    },
+    "-C": {
+     "en": "N lines around",
+     "ru": "N строк вокруг"
+    }
+   }
+  },
+  "crontab": {
+   "en": "scheduled jobs of a user",
+   "ru": "расписание задач пользователя",
+   "flags": {
+    "-l": {
+     "en": "list",
+     "ru": "показать"
+    },
+    "-e": {
+     "en": "edit",
+     "ru": "править"
+    },
+    "-r": {
+     "en": "REMOVE all jobs",
+     "ru": "УДАЛИТЬ все задачи"
+    },
+    "-u": {
+     "en": "of this user",
+     "ru": "этого пользователя"
+    }
+   }
+  },
+  "restic": {
+   "en": "encrypted backups",
+   "ru": "зашифрованные бэкапы",
+   "sub": {
+    "snapshots": {
+     "en": "list backups",
+     "ru": "список копий",
+     "flags": {
+      "--latest": {
+       "en": "only the newest N",
+       "ru": "только последние N"
+      },
+      "--host": {
+       "en": "of this host",
+       "ru": "этого хоста"
+      }
+     }
+    },
+    "backup": {
+     "en": "make a backup",
+     "ru": "сделать копию",
+     "flags": {
+      "--exclude": {
+       "en": "skip a pattern",
+       "ru": "пропустить шаблон"
+      },
+      "--tag": {
+       "en": "label it",
+       "ru": "пометить"
+      },
+      "--dry-run": {
+       "en": "only show",
+       "ru": "только показать"
+      }
+     }
+    },
+    "restore": {
+     "en": "restore a snapshot",
+     "ru": "восстановить копию",
+     "flags": {
+      "--target": {
+       "en": "into this folder",
+       "ru": "в эту папку"
+      },
+      "--include": {
+       "en": "only these paths",
+       "ru": "только эти пути"
+      }
+     }
+    },
+    "check": {
+     "en": "verify the repository",
+     "ru": "проверить хранилище",
+     "flags": {
+      "--read-data-subset": {
+       "en": "also read e.g. 5% of data",
+       "ru": "прочитать, например, 5% данных"
+      }
+     }
+    },
+    "forget": {
+     "en": "drop old snapshots",
+     "ru": "забыть старые копии",
+     "flags": {
+      "--keep-daily": {
+       "en": "keep N daily",
+       "ru": "оставить N дневных"
+      },
+      "--keep-weekly": {
+       "en": "keep N weekly",
+       "ru": "оставить N недельных"
+      },
+      "--prune": {
+       "en": "and free the space",
+       "ru": "и освободить место"
+      },
+      "--dry-run": {
+       "en": "only show",
+       "ru": "только показать"
+      }
+     }
+    },
+    "prune": {
+     "en": "free space of forgotten data",
+     "ru": "освободить место от забытого"
+    },
+    "stats": {
+     "en": "repository size",
+     "ru": "размер хранилища"
+    },
+    "ls": {
+     "en": "files in a snapshot",
+     "ru": "файлы в копии"
+    },
+    "diff": {
+     "en": "what changed between snapshots",
+     "ru": "что изменилось между копиями"
+    },
+    "unlock": {
+     "en": "remove stale locks",
+     "ru": "снять зависшие блокировки"
+    },
+    "mount": {
+     "en": "browse snapshots as a folder",
+     "ru": "смотреть копии как папку"
+    },
+    "init": {
+     "en": "create a repository",
+     "ru": "создать хранилище"
+    }
+   },
+   "examples": [
+    {
+     "line": "restic snapshots --latest 5",
+     "en": "the last five backups",
+     "ru": "пять последних копий"
+    }
+   ]
+  },
+  "ls": {
+   "en": "list files",
+   "ru": "список файлов",
+   "flags": {
+    "-l": {
+     "en": "details",
+     "ru": "подробно"
+    },
+    "-a": {
+     "en": "hidden too",
+     "ru": "и скрытые"
+    },
+    "-h": {
+     "en": "human sizes",
+     "ru": "понятные размеры"
+    },
+    "-t": {
+     "en": "newest first",
+     "ru": "сначала новые"
+    },
+    "-S": {
+     "en": "biggest first",
+     "ru": "сначала большие"
+    },
+    "-la": {
+     "en": "everything, detailed",
+     "ru": "всё и подробно"
+    }
+   }
+  },
+  "cd": {
+   "en": "change folder",
+   "ru": "сменить папку"
+  },
+  "cat": {
+   "en": "print a file",
+   "ru": "показать файл"
+  },
+  "less": {
+   "en": "read a file page by page",
+   "ru": "читать файл постранично",
+   "flags": {
+    "+F": {
+     "en": "follow like tail -f",
+     "ru": "следить как tail -f"
+    }
+   }
+  },
+  "top": {
+   "en": "processes, live",
+   "ru": "процессы вживую"
+  },
+  "htop": {
+   "en": "processes, live and friendly",
+   "ru": "процессы вживую, удобнее"
+  },
+  "free": {
+   "en": "memory",
+   "ru": "память",
+   "flags": {
+    "-h": {
+     "en": "human sizes",
+     "ru": "понятные размеры"
+    },
+    "-m": {
+     "en": "in MB",
+     "ru": "в МБ"
+    }
+   }
+  },
+  "uptime": {
+   "en": "how long up, load",
+   "ru": "сколько работает, нагрузка"
+  },
+  "ps": {
+   "en": "processes",
+   "ru": "процессы",
+   "flags": {
+    "aux": {
+     "en": "all processes",
+     "ru": "все процессы"
+    },
+    "-ef": {
+     "en": "all, with parents",
+     "ru": "все, с родителями"
+    },
+    "--sort=-%mem": {
+     "en": "by memory",
+     "ru": "по памяти"
+    },
+    "--sort=-%cpu": {
+     "en": "by CPU",
+     "ru": "по процессору"
+    }
+   },
+   "examples": [
+    {
+     "line": "ps aux --sort=-%mem | head",
+     "en": "memory hogs",
+     "ru": "кто ест память"
+    },
+    {
+     "line": "ps aux --sort=-%cpu | head",
+     "en": "CPU hogs",
+     "ru": "кто ест процессор"
+    }
+   ]
+  },
+  "kill": {
+   "en": "signal a process",
+   "ru": "послать сигнал процессу",
+   "flags": {
+    "-9": {
+     "en": "force (SIGKILL)",
+     "ru": "принудительно (SIGKILL)"
+    },
+    "-HUP": {
+     "en": "reload",
+     "ru": "перечитать"
+    },
+    "-l": {
+     "en": "list signals",
+     "ru": "список сигналов"
+    }
+   }
+  },
+  "pkill": {
+   "en": "signal processes by name",
+   "ru": "сигнал процессам по имени",
+   "flags": {
+    "-f": {
+     "en": "match the full command line",
+     "ru": "по всей командной строке"
+    }
+   }
+  },
+  "ip": {
+   "en": "network addresses and routes",
+   "ru": "сетевые адреса и маршруты",
+   "sub": {
+    "a": {
+     "en": "addresses",
+     "ru": "адреса"
+    },
+    "addr": {
+     "en": "addresses",
+     "ru": "адреса"
+    },
+    "r": {
+     "en": "routes",
+     "ru": "маршруты"
+    },
+    "route": {
+     "en": "routes",
+     "ru": "маршруты"
+    },
+    "link": {
+     "en": "interfaces",
+     "ru": "интерфейсы"
+    },
+    "-br": {
+     "en": "brief",
+     "ru": "кратко"
+    }
+   },
+   "flags": {
+    "-4": {
+     "en": "IPv4 only",
+     "ru": "только IPv4"
+    },
+    "-6": {
+     "en": "IPv6 only",
+     "ru": "только IPv6"
+    }
+   }
+  },
+  "ping": {
+   "en": "is a host reachable",
+   "ru": "доступен ли хост",
+   "flags": {
+    "-c": {
+     "en": "N packets",
+     "ru": "N пакетов"
+    },
+    "-4": {
+     "en": "IPv4",
+     "ru": "IPv4"
+    },
+    "-6": {
+     "en": "IPv6",
+     "ru": "IPv6"
+    }
+   }
+  },
+  "curl": {
+   "en": "HTTP requests",
+   "ru": "HTTP-запросы",
+   "flags": {
+    "-I": {
+     "en": "headers only",
+     "ru": "только заголовки"
+    },
+    "-s": {
+     "en": "silent",
+     "ru": "тихо"
+    },
+    "-S": {
+     "en": "but show errors",
+     "ru": "но с ошибками"
+    },
+    "-L": {
+     "en": "follow redirects",
+     "ru": "идти по редиректам"
+    },
+    "-o": {
+     "en": "save to a file",
+     "ru": "сохранить в файл"
+    },
+    "-O": {
+     "en": "save under its name",
+     "ru": "сохранить под своим именем"
+    },
+    "-v": {
+     "en": "verbose",
+     "ru": "подробно"
+    },
+    "-k": {
+     "en": "ignore TLS errors",
+     "ru": "не проверять TLS"
+    },
+    "-w": {
+     "en": "print timings, e.g. '%{time_total}'",
+     "ru": "вывести время, например '%{time_total}'"
+    },
+    "-X": {
+     "en": "method",
+     "ru": "метод"
+    },
+    "-H": {
+     "en": "header",
+     "ru": "заголовок"
+    },
+    "-d": {
+     "en": "body",
+     "ru": "тело"
+    }
+   },
+   "examples": [
+    {
+     "line": "curl -sSI https://",
+     "en": "headers of a site",
+     "ru": "заголовки сайта"
+    }
+   ]
+  },
+  "wget": {
+   "en": "download files",
+   "ru": "скачать файлы",
+   "flags": {
+    "-O": {
+     "en": "save as",
+     "ru": "сохранить как"
+    },
+    "-q": {
+     "en": "quiet",
+     "ru": "тихо"
+    },
+    "-c": {
+     "en": "continue",
+     "ru": "докачать"
+    }
+   }
+  },
+  "tar": {
+   "en": "archives",
+   "ru": "архивы",
+   "flags": {
+    "-czf": {
+     "en": "create .tar.gz",
+     "ru": "создать .tar.gz"
+    },
+    "-xzf": {
+     "en": "extract .tar.gz",
+     "ru": "распаковать .tar.gz"
+    },
+    "-tzf": {
+     "en": "list .tar.gz",
+     "ru": "содержимое .tar.gz"
+    },
+    "-C": {
+     "en": "into this folder",
+     "ru": "в эту папку"
+    }
+   }
+  },
+  "rsync": {
+   "en": "copy / sync files",
+   "ru": "копировать и синхронизировать файлы",
+   "flags": {
+    "-a": {
+     "en": "archive mode",
+     "ru": "режим архива"
+    },
+    "-v": {
+     "en": "verbose",
+     "ru": "подробно"
+    },
+    "-z": {
+     "en": "compress",
+     "ru": "сжимать"
+    },
+    "-P": {
+     "en": "progress, resumable",
+     "ru": "прогресс, докачка"
+    },
+    "-n": {
+     "en": "dry run",
+     "ru": "только показать"
+    },
+    "--delete": {
+     "en": "delete extra files at the target",
+     "ru": "удалять лишнее в цели"
+    }
+   }
+  },
+  "scp": {
+   "en": "copy over SSH",
+   "ru": "копировать по SSH",
+   "flags": {
+    "-r": {
+     "en": "folders",
+     "ru": "папки"
+    },
+    "-P": {
+     "en": "port",
+     "ru": "порт"
+    }
+   }
+  },
+  "ssh": {
+   "en": "log in to another server",
+   "ru": "войти на другой сервер",
+   "flags": {
+    "-p": {
+     "en": "port",
+     "ru": "порт"
+    },
+    "-i": {
+     "en": "key file",
+     "ru": "файл ключа"
+    },
+    "-L": {
+     "en": "local port forward",
+     "ru": "проброс локального порта"
+    },
+    "-J": {
+     "en": "via a jump host",
+     "ru": "через промежуточный хост"
+    }
+   }
+  },
+  "sudo": {
+   "en": "run as root",
+   "ru": "выполнить от root",
+   "flags": {
+    "-u": {
+     "en": "as this user",
+     "ru": "от этого пользователя"
+    },
+    "-i": {
+     "en": "root login shell",
+     "ru": "оболочка root"
+    },
+    "-l": {
+     "en": "what I may run",
+     "ru": "что мне разрешено"
+    }
+   }
+  },
+  "chmod": {
+   "en": "change permissions",
+   "ru": "сменить права",
+   "flags": {
+    "-R": {
+     "en": "recursively — careful",
+     "ru": "рекурсивно — осторожно"
+    },
+    "+x": {
+     "en": "make executable",
+     "ru": "сделать исполняемым"
+    },
+    "600": {
+     "en": "owner read/write only",
+     "ru": "чтение и запись только владельцу"
+    }
+   }
+  },
+  "chown": {
+   "en": "change owner",
+   "ru": "сменить владельца",
+   "flags": {
+    "-R": {
+     "en": "recursively — careful",
+     "ru": "рекурсивно — осторожно"
+    }
+   }
+  },
+  "cp": {
+   "en": "copy",
+   "ru": "копировать",
+   "flags": {
+    "-r": {
+     "en": "folders",
+     "ru": "папки"
+    },
+    "-a": {
+     "en": "keep everything",
+     "ru": "сохранить всё"
+    },
+    "-i": {
+     "en": "ask before overwrite",
+     "ru": "спрашивать перед заменой"
+    }
+   }
+  },
+  "mv": {
+   "en": "move / rename",
+   "ru": "переместить или переименовать",
+   "flags": {
+    "-i": {
+     "en": "ask before overwrite",
+     "ru": "спрашивать перед заменой"
+    },
+    "-n": {
+     "en": "never overwrite",
+     "ru": "не заменять"
+    }
+   }
+  },
+  "rm": {
+   "en": "delete files — no trash bin",
+   "ru": "удалить файлы — корзины нет",
+   "flags": {
+    "-r": {
+     "en": "folders",
+     "ru": "папки"
+    },
+    "-f": {
+     "en": "no questions",
+     "ru": "без вопросов"
+    },
+    "-i": {
+     "en": "ask for each",
+     "ru": "спрашивать про каждый"
+    },
+    "-I": {
+     "en": "ask once",
+     "ru": "спросить один раз"
+    }
+   }
+  },
+  "mkdir": {
+   "en": "make a folder",
+   "ru": "создать папку",
+   "flags": {
+    "-p": {
+     "en": "with parents, no error if exists",
+     "ru": "с родителями, без ошибки если есть"
+    }
+   }
+  },
+  "find": {
+   "en": "find files",
+   "ru": "найти файлы",
+   "flags": {
+    "-name": {
+     "en": "by name, e.g. '*.log'",
+     "ru": "по имени, например '*.log'"
+    },
+    "-type": {
+     "en": "f files, d folders",
+     "ru": "f файлы, d папки"
+    },
+    "-mtime": {
+     "en": "modified N days ago (+7 older)",
+     "ru": "изменён N дней назад (+7 старше)"
+    },
+    "-size": {
+     "en": "e.g. +100M",
+     "ru": "например +100M"
+    },
+    "-delete": {
+     "en": "DELETE what was found",
+     "ru": "УДАЛИТЬ найденное"
+    },
+    "-maxdepth": {
+     "en": "how deep",
+     "ru": "глубина"
+    }
+   },
+   "examples": [
+    {
+     "line": "find / -xdev -type f -size +500M",
+     "en": "big files",
+     "ru": "большие файлы"
+    }
+   ]
+  },
+  "certbot": {
+   "en": "Let's Encrypt certificates",
+   "ru": "сертификаты Let's Encrypt",
+   "sub": {
+    "certificates": {
+     "en": "list certificates and dates",
+     "ru": "сертификаты и сроки"
+    },
+    "renew": {
+     "en": "renew due certificates",
+     "ru": "продлить те, что пора",
+     "flags": {
+      "--dry-run": {
+       "en": "only test",
+       "ru": "только проверить"
+      }
+     }
+    },
+    "certonly": {
+     "en": "get a certificate",
+     "ru": "получить сертификат"
+    },
+    "delete": {
+     "en": "delete a certificate",
+     "ru": "удалить сертификат"
+    }
+   }
+  },
+  "fail2ban-client": {
+   "en": "fail2ban control",
+   "ru": "управление fail2ban",
+   "sub": {
+    "status": {
+     "en": "jails (status sshd: banned IPs)",
+     "ru": "клетки (status sshd — забаненные IP)"
+    },
+    "set": {
+     "en": "e.g. set sshd unbanip 1.2.3.4",
+     "ru": "например set sshd unbanip 1.2.3.4"
+    },
+    "reload": {
+     "en": "reload config",
+     "ru": "перечитать конфиг"
+    }
+   }
+  },
+  "tmux": {
+   "en": "terminal sessions that survive disconnects",
+   "ru": "сессии терминала, переживающие обрыв",
+   "sub": {
+    "new": {
+     "en": "new session",
+     "ru": "новая сессия",
+     "flags": {
+      "-s": {
+       "en": "name",
+       "ru": "имя"
+      }
+     }
+    },
+    "attach": {
+     "en": "attach",
+     "ru": "подключиться",
+     "flags": {
+      "-t": {
+       "en": "to this session",
+       "ru": "к этой сессии"
+      }
+     }
+    },
+    "ls": {
+     "en": "sessions",
+     "ru": "сессии"
+    },
+    "kill-session": {
+     "en": "end a session",
+     "ru": "закрыть сессию",
+     "flags": {
+      "-t": {
+       "en": "this one",
+       "ru": "эту"
+      }
+     }
+    }
+   }
+  },
+  "screen": {
+   "en": "terminal sessions (older)",
+   "ru": "сессии терминала (старое)",
+   "flags": {
+    "-S": {
+     "en": "new named session",
+     "ru": "новая именованная сессия"
+    },
+    "-r": {
+     "en": "reattach",
+     "ru": "вернуться"
+    },
+    "-ls": {
+     "en": "sessions",
+     "ru": "сессии"
+    }
+   }
+  },
+  "nano": {
+   "en": "simple text editor",
+   "ru": "простой текстовый редактор"
+  },
+  "vim": {
+   "en": "text editor (:wq saves, :q! quits)",
+   "ru": "текстовый редактор (:wq — сохранить, :q! — выйти)"
+  },
+  "lsof": {
+   "en": "open files and ports",
+   "ru": "открытые файлы и порты",
+   "flags": {
+    "-i": {
+     "en": "network, e.g. -i :443",
+     "ru": "сеть, например -i :443"
+    },
+    "+L1": {
+     "en": "deleted but still open (eats disk)",
+     "ru": "удалённые, но открытые (занимают диск)"
+    }
+   }
+  },
+  "dig": {
+   "en": "DNS lookup",
+   "ru": "DNS-запрос",
+   "flags": {
+    "+short": {
+     "en": "answer only",
+     "ru": "только ответ"
+    },
+    "-x": {
+     "en": "reverse lookup",
+     "ru": "обратный запрос"
+    }
+   }
+  },
+  "hostnamectl": {
+   "en": "host name and OS",
+   "ru": "имя хоста и ОС"
+  },
+  "timedatectl": {
+   "en": "time, zone, NTP",
+   "ru": "время, пояс, NTP",
+   "sub": {
+    "set-timezone": {
+     "en": "e.g. Europe/Berlin",
+     "ru": "например Europe/Moscow"
+    },
+    "list-timezones": {
+     "en": "all zones",
+     "ru": "все пояса"
+    }
+   }
+  },
+  "reboot": {
+   "en": "restart the machine",
+   "ru": "перезагрузить машину"
+  },
+  "shutdown": {
+   "en": "power off / schedule a reboot",
+   "ru": "выключить или перезагрузить по времени",
+   "flags": {
+    "-r": {
+     "en": "reboot",
+     "ru": "перезагрузить"
+    },
+    "-h": {
+     "en": "halt",
+     "ru": "выключить"
+    },
+    "-c": {
+     "en": "cancel",
+     "ru": "отменить"
+    },
+    "now": {
+     "en": "immediately",
+     "ru": "немедленно"
+    }
+   }
+  },
+  "exit": {
+   "en": "close this console",
+   "ru": "закрыть консоль"
+  },
+  "history": {
+   "en": "commands typed before",
+   "ru": "введённые раньше команды"
+  },
+  "clear": {
+   "en": "clear the screen",
+   "ru": "очистить экран"
+  },
+  "which": {
+   "en": "where a command lives",
+   "ru": "где лежит команда"
+  },
+  "whoami": {
+   "en": "current user",
+   "ru": "текущий пользователь"
+  },
+  "uname": {
+   "en": "kernel",
+   "ru": "ядро",
+   "flags": {
+    "-a": {
+     "en": "everything",
+     "ru": "всё"
+    },
+    "-r": {
+     "en": "release",
+     "ru": "версия"
+    }
+   }
+  },
+  "ncdu": {
+   "en": "interactive disk usage",
+   "ru": "интерактивно: что занимает диск",
+   "flags": {
+    "-x": {
+     "en": "one disk only",
+     "ru": "только один диск"
+    }
+   }
+  },
+  "lsblk": {
+   "en": "disks and partitions",
+   "ru": "диски и разделы",
+   "flags": {
+    "-f": {
+     "en": "with filesystems",
+     "ru": "с файловыми системами"
+    }
+   }
+  },
+  "dmesg": {
+   "en": "kernel messages",
+   "ru": "сообщения ядра",
+   "flags": {
+    "-T": {
+     "en": "readable times",
+     "ru": "понятное время"
+    },
+    "-w": {
+     "en": "follow",
+     "ru": "следить"
+    },
+    "--level=err,warn": {
+     "en": "problems only",
+     "ru": "только проблемы"
+    }
+   }
+  },
+  "mount": {
+   "en": "mounted filesystems",
+   "ru": "подключённые файловые системы"
+  },
+  "watch": {
+   "en": "repeat a command every 2 s",
+   "ru": "повторять команду каждые 2 с",
+   "flags": {
+    "-n": {
+     "en": "interval",
+     "ru": "интервал"
+    },
+    "-d": {
+     "en": "highlight changes",
+     "ru": "подсвечивать изменения"
+    }
+   }
+  },
+  "iptables": {
+   "en": "low-level firewall",
+   "ru": "низкоуровневый файрвол",
+   "flags": {
+    "-L": {
+     "en": "list rules",
+     "ru": "показать правила"
+    },
+    "-n": {
+     "en": "numbers",
+     "ru": "числа"
+    },
+    "-v": {
+     "en": "counters",
+     "ru": "счётчики"
+    },
+    "-S": {
+     "en": "as commands",
+     "ru": "в виде команд"
+    },
+    "-F": {
+     "en": "FLUSH all rules",
+     "ru": "СТЕРЕТЬ все правила"
+    }
+   },
+   "examples": [
+    {
+     "line": "iptables -L -n -v",
+     "en": "rules with counters",
+     "ru": "правила со счётчиками"
+    }
+   ]
+  },
+  "nft": {
+   "en": "nftables firewall",
+   "ru": "файрвол nftables",
+   "sub": {
+    "list": {
+     "en": "show",
+     "ru": "показать",
+     "sub": {
+      "ruleset": {
+       "en": "all rules",
+       "ru": "все правила"
+      }
+     }
+    }
+   }
+  },
+  "openssl": {
+   "en": "TLS tools",
+   "ru": "инструменты TLS",
+   "sub": {
+    "s_client": {
+     "en": "connect and show the certificate",
+     "ru": "подключиться и показать сертификат",
+     "flags": {
+      "-connect": {
+       "en": "host:443",
+       "ru": "host:443"
+      },
+      "-servername": {
+       "en": "SNI name",
+       "ru": "имя SNI"
+      }
+     }
+    },
+    "x509": {
+     "en": "read a certificate",
+     "ru": "прочитать сертификат",
+     "flags": {
+      "-noout": {
+       "en": "no PEM",
+       "ru": "без PEM"
+      },
+      "-dates": {
+       "en": "validity dates",
+       "ru": "сроки действия"
+      },
+      "-in": {
+       "en": "file",
+       "ru": "файл"
+      }
+     }
+    }
+   }
+  },
+  "env": {
+   "en": "environment variables",
+   "ru": "переменные окружения"
+  },
+  "echo": {
+   "en": "print text",
+   "ru": "напечатать текст"
+  },
+  "wc": {
+   "en": "count lines / words",
+   "ru": "посчитать строки и слова",
+   "flags": {
+    "-l": {
+     "en": "lines",
+     "ru": "строки"
+    }
+   }
+  },
+  "sort": {
+   "en": "sort lines",
+   "ru": "отсортировать строки",
+   "flags": {
+    "-h": {
+     "en": "human sizes",
+     "ru": "понятные размеры"
+    },
+    "-n": {
+     "en": "numbers",
+     "ru": "числа"
+    },
+    "-r": {
+     "en": "reverse",
+     "ru": "наоборот"
+    },
+    "-u": {
+     "en": "unique",
+     "ru": "без повторов"
+    }
+   }
+  },
+  "uniq": {
+   "en": "drop repeated lines",
+   "ru": "убрать повторы",
+   "flags": {
+    "-c": {
+     "en": "count them",
+     "ru": "посчитать"
+    }
+   }
+  },
+  "awk": {
+   "en": "process columns",
+   "ru": "обработка столбцов"
+  },
+  "sed": {
+   "en": "edit text streams",
+   "ru": "правка текста потоком",
+   "flags": {
+    "-i": {
+     "en": "edit the file in place",
+     "ru": "править файл на месте"
+    },
+    "-n": {
+     "en": "print only what is asked",
+     "ru": "печатать только нужное"
+    }
+   }
+  },
+  "xargs": {
+   "en": "build commands from input",
+   "ru": "команды из ввода"
+  }
+ }
+}

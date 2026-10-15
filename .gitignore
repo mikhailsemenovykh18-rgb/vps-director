@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+state.json
+*.log
+docs/tasks/
