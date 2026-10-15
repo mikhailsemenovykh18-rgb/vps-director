@@ -218,3 +218,12 @@ class NodeTestsTest(unittest.TestCase):
         files = sorted(os.path.join(WEB, "tests", f) for f in os.listdir(os.path.join(WEB, "tests")) if f.endswith(".test.js"))
         res = subprocess.run(["node", "--test", *files], capture_output=True, text=True, timeout=120)
         self.assertEqual(res.returncode, 0, res.stdout[-3000:] + res.stderr[-2000:])
+
+
+class ExecutableTest(unittest.TestCase):
+    def test_entry_points_are_executable_in_git(self):
+        import subprocess
+        root = os.path.dirname(WEB)
+        out = subprocess.run(["git", "ls-files", "-s", "install.sh", "director.py"], cwd=root, capture_output=True, text=True).stdout
+        if out:  # not a git checkout (an archive): nothing to check
+            self.assertTrue(all(line.startswith("100755") for line in out.splitlines()), out)
