@@ -104,6 +104,25 @@ if ! systemctl --user is-active "$UNIT"; then
   echo "The service did not start. Its log: journalctl --user -u $UNIT -n 50" >&2
   exit 1
 fi
+# the agent: a Claude Code that is not logged in does not fail, it just waits — say it now, not in the chat
+CLAUDE_BIN="$(command -v claude || echo "$HOME/.local/bin/claude")"
+if [ -x "$CLAUDE_BIN" ] && ! grep -q '^CLAUDE_CODE_OAUTH_TOKEN=' "$CONF/engine.env" 2>/dev/null \
+   && ! timeout 20 "$CLAUDE_BIN" auth status >/dev/null 2>&1; then
+  echo
+  echo "Claude Code is not logged in for $ME yet. Either run 'claude' once and log in, or (recommended,"
+  echo "valid for a year) run 'claude setup-token' and put the token into $CONF/engine.env as"
+  echo "CLAUDE_CODE_OAUTH_TOKEN=..., then: systemctl --user restart $UNIT"
+fi
+# the Mini App needs HTTPS: offer it once, it is the part people get stuck on
+if ! grep -q '^WEB_URL=' "$CONF/.env"; then
+  echo
+  ans=""
+  read -r -p "Open the Mini App over HTTPS now (free certificate; needs sudo and port 80 open)? [y/N] " ans || ans=""
+  case "$ans" in
+    y|Y|yes|д|да) "$HERE/https.sh" --instance "$INSTANCE" || echo "HTTPS was not set up; try again later: ./https.sh --instance $INSTANCE" ;;
+    *) echo "Later: ./https.sh --instance $INSTANCE" ;;
+  esac
+fi
 echo
 echo "Done. Open your bot in Telegram and press Start."
 echo "Logs: journalctl --user -u $UNIT -f    Instruction for the agent: $CONF/PROMPT.md"

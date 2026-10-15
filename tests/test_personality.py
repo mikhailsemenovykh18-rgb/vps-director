@@ -72,7 +72,8 @@ class PersonaSetupTest(unittest.TestCase):
         self.assertTrue(any("Enter = Ann" in line for line in out))
 
     def test_custom_answers_in_russian(self):
-        wiz, env, out, _ = run_wizard(["y", "Пятница", "Миша"], lang="ru", first="Ivan")
+        with mock.patch.dict(os.environ, {"LC_ALL": "", "LC_MESSAGES": "", "LANG": "ru_RU.UTF-8"}):
+            wiz, env, out, _ = run_wizard(["y", "Пятница", "Миша"], lang="ru", first="Ivan")
         self.assertEqual((env["LANG"], env["NAME"], env["OWNER_NAME"]), ("ru", "Пятница", "Миша"))
         self.assertTrue(any("Как мне себя называть" in line for line in out))
         self.assertEqual(director.Config(os.path.dirname(os.path.join(wiz.conf, ".env"))).title, "Пятница")

@@ -38,7 +38,8 @@ git clone https://github.com/mikhailsemenovykh18-rgb/vps-director.git && cd vps-
 ```
 
 The installer asks for a bot token from [@BotFather](https://t.me/BotFather), recognises you by the
-first message you send to the bot, and starts the service. Details: [Install in detail](#install-in-detail).
+first message you send to the bot, starts the service and offers to put the Mini App on HTTPS
+(a free certificate, no domain needed). Details: [Install in detail](#install-in-detail).
 
 ## Why VPS Director
 
@@ -104,9 +105,32 @@ cd vps-director
 The installer runs the tests, then `director.py setup`: it asks for a bot token (from
 [@BotFather](https://t.me/BotFather), hidden input, checked with Telegram) and tells you to send
 the bot any message — it shows who wrote and asks *"Is this you?"*. That sender becomes the
-owner and the bot's language follows their Telegram language (Russian → `ru`, else `en`); no ids
-to look up. Then it starts a systemd user service `vps-director@main`. Open your bot and press
+owner and the bot's language follows their Telegram language (en, ru, es, de, fr or pt; English
+otherwise); no ids to look up. Then it starts a systemd user service `vps-director@main`, checks
+that Claude Code is logged in, and offers HTTPS for the Mini App (see below). Open your bot and press
 **Start**. To redo the setup later: `python3 director.py setup --force [--instance NAME]`.
+
+**Claude Code login.** The bot runs `claude` as your user, so that user must be logged in. The
+sturdiest way is a year-long token: run `claude setup-token`, then put the token into
+`~/.config/vps-director/main/engine.env` as `CLAUDE_CODE_OAUTH_TOKEN=…` and restart the service.
+If the agent is not logged in, the bot says so after 90 seconds instead of waiting silently.
+If the official installer (`curl -fsSL https://claude.ai/install.sh | bash`) hangs on your server,
+`npm install -g @anthropic-ai/claude-code` installs the same CLI.
+
+**HTTPS for the Mini App in one command.** Telegram opens Mini Apps only over HTTPS:
+
+```bash
+./https.sh                              # https://vpsd-main.<your-ip>.sslip.io — no domain needed
+./https.sh --domain bot.example.com     # or your own domain pointing to this server
+./https.sh --port 8443                  # when port 443 belongs to something else
+sudo ./https.sh --user alice            # as root, for the bot that runs under alice
+./https.sh --rollback                   # remove it again
+```
+
+It reuses nginx + certbot when nginx already serves other sites here (a separate server block,
+checked with `nginx -t` before reload; your sites keep working), otherwise installs Caddy. Port 80
+must be reachable for the certificate check; with ufw active it opens 80 and the HTTPS port. Then it
+writes `WEB_PORT` and `WEB_URL`, restarts the bot and checks the address.
 
 Describe your server in `~/.config/vps-director/main/PROMPT.md` (projects, services, where logs
 are) — the agent reads it on every task.
@@ -397,9 +421,11 @@ What is in it:
 
 It has its own look — a dark control panel with one accent colour and monospace numbers — rather
 than Telegram's theme; it follows the phone's safe areas, the native Back and main buttons and
-haptic feedback; English or Russian follows `LANG`. Fonts (Geist, OFL) and xterm.js are vendored.
+haptic feedback; the language follows `LANG` (six languages), light and dark themes follow the
+phone or your choice. Fonts (Geist, OFL) and xterm.js are vendored.
 
-Telegram opens Mini Apps only over HTTPS, so put your own HTTPS in front of the port and set
+Telegram opens Mini Apps only over HTTPS. `./https.sh` sets it up for you (see
+[Install in detail](#install-in-detail)); to do it by hand, put your own HTTPS in front of the port and set
 `WEB_URL` to that address (the root of a host, e.g. `https://vps.example.com`). Any of these works;
 the console's WebSocket (`/ws/console`) must be passed through too:
 
@@ -703,6 +729,11 @@ MIT License. `web/vendor/xterm/` is xterm.js (MIT, see its LICENSE.txt); `web/ve
 ```bash
 git clone https://github.com/mikhailsemenovykh18-rgb/vps-director.git && cd vps-director && ./install.sh
 ```
+
+Установщик сам предложит включить HTTPS для Mini App (бесплатный сертификат, домен не нужен);
+позже это делает `./https.sh`. Агенту нужен вход в Claude Code под тем же пользователем: надёжнее
+всего `claude setup-token` и токен в `~/.config/vps-director/main/engine.env`
+(`CLAUDE_CODE_OAUTH_TOKEN=…`). Если вход не выполнен, бот скажет об этом через 90 секунд.
 
 Подробнее:
 

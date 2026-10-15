@@ -12,6 +12,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from test_director import OWNER, Base, FakeTelegram, director, make_cfg  # noqa: E402,F401
 
 
+def read_text(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
 def press(d, data):
     d.callback({"id": "1", "from": {"id": int(OWNER)}, "message": {"chat": {"id": int(OWNER)}}, "data": data})
 
@@ -124,9 +129,20 @@ class SetupTest(unittest.TestCase):
         self.assertEqual(os.stat(os.path.join(self.conf, ".env")).st_mode & 0o777, 0o600)
         self.assertEqual(os.stat(self.conf).st_mode & 0o777, 0o700)
 
-    def test_english_for_other_languages(self):
+    def test_bot_speaks_the_owners_telegram_language(self):
         env = self.run_setup(FakeBotAPI(polls=[[private(5, 1, lang="de")]]), answers=["yes"])
-        self.assertEqual((env["OWNER_IDS"], env["LANG"]), ("5", "en"))
+        self.assertEqual((env["OWNER_IDS"], env["LANG"]), ("5", "de"))
+
+    def test_english_for_languages_we_do_not_have(self):
+        env = self.run_setup(FakeBotAPI(polls=[[private(5, 1, lang="ja")]]), answers=["yes"])
+        self.assertEqual(env["LANG"], "en")
+
+    def test_wizard_language_follows_the_server_locale(self):
+        from vps_director import setup
+        self.assertEqual(setup.ui_lang({"LANG": "ru_RU.UTF-8"}), "ru")
+        self.assertEqual(setup.ui_lang({"LANG": "C.UTF-8"}), "en")
+        self.assertEqual(setup.ui_lang({"LC_ALL": "en_US.UTF-8", "LANG": "ru_RU.UTF-8"}), "en")
+        self.assertEqual(setup.bot_lang("pt-br"), "pt")
 
     def test_no_message_in_time_falls_back_to_typing_the_id(self):
         env = self.run_setup(FakeBotAPI(polls=[]), answers=["abc", "42", "ru"])
@@ -679,7 +695,7 @@ class OutboxTest(unittest.TestCase):
             fh.write("BOT_TOKEN=t\nOWNER_IDS=1\nLANG=en\n")
         self.d = director.Director(director.Config(self.tmp))
         self.sent, self.msgs = [], []
-        self.d.tg.send_file = lambda chat, path, caption="": self.sent.append((os.path.basename(path), open(path).read())) or True
+        self.d.tg.send_file = lambda chat, path, caption="": self.sent.append((os.path.basename(path), read_text(path))) or True
         self.d.tg.send = lambda chat, text, buttons=None, raw=False: self.msgs.append(text)
 
     def test_files_are_sent_then_deleted_links_never(self):

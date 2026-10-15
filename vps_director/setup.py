@@ -101,37 +101,78 @@ def describe_user(user):
     return "%s, id %s" % (name, user.get("id"))
 
 
+# The wizard speaks one language from start to end: the server's locale (Russian or English). The bot's own
+# language (LANG) is a separate thing: it follows the owner's Telegram app.
+UI = {
+    "en": {"create": "Create a bot: open @BotFather in Telegram, send /newbot and copy the token it gives you.",
+           "token": "Bot token (input is hidden): ", "not_token": "This does not look like a bot token (digits, a colon, letters).",
+           "rejected": "Telegram did not accept this token.", "found": "Bot @%s found.",
+           "send": "Now open @%s in Telegram and send it any message (waiting up to %d minutes)…",
+           "from": "Message from %s.", "is_you": "Is this you? [y/N] ",
+           "late": "No message arrived in time. You can type your numeric Telegram id instead "
+                   "(@userinfobot tells it); an empty answer stops the setup.",
+           "id": "Your Telegram id: ", "id_bad": "The id is a number.",
+           "lang": "Language of the bot's messages [en/ru/es/de/fr/pt] (en): ", "lang_bad": "One of: en ru es de fr pt.",
+           "saved": "Saved %s (owner id %s, bot language %s)."},
+    "ru": {"create": "Создайте бота: откройте @BotFather в Telegram, отправьте /newbot и скопируйте токен, который он выдаст.",
+           "token": "Токен бота (ввод скрыт): ", "not_token": "Не похоже на токен бота (цифры, двоеточие, буквы).",
+           "rejected": "Telegram не принял этот токен.", "found": "Бот @%s найден.",
+           "send": "Теперь откройте @%s в Telegram и отправьте ему любое сообщение (жду до %d минут)…",
+           "from": "Сообщение от %s.", "is_you": "Это вы? [y/N] ",
+           "late": "Сообщение не пришло. Можно ввести свой числовой id в Telegram (его скажет @userinfobot); "
+                   "пустой ответ остановит установку.",
+           "id": "Ваш id в Telegram: ", "id_bad": "id — это число.",
+           "lang": "Язык сообщений бота [en/ru/es/de/fr/pt] (ru): ", "lang_bad": "Одно из: en ru es de fr pt.",
+           "saved": "Сохранено: %s (владелец %s, язык бота %s)."},
+}
+BOT_LANGS = ("en", "ru", "es", "de", "fr", "pt")
+
+
+def ui_lang(environ=None):
+    """ru when the server's locale is Russian, otherwise en."""
+    environ = os.environ if environ is None else environ
+    loc = environ.get("LC_ALL") or environ.get("LC_MESSAGES") or environ.get("LANG") or ""
+    return "ru" if loc.lower().startswith("ru") else "en"
+
+
+def bot_lang(code):
+    """The bot's language from a Telegram language_code ("pt-br" → pt); English if we do not have it."""
+    code = str(code or "").lower()[:2]
+    return code if code in BOT_LANGS else "en"
+
+
 def step_token(wiz):
     """Bot token: hidden input, checked with getMe; three tries."""
-    wiz.say("Create a bot: open @BotFather in Telegram, send /newbot and copy the token it gives you.")
+    u = UI[wiz.ui]
+    wiz.say(u["create"])
     for _ in range(3):
-        token = wiz.secret("Bot token (input is hidden): ").strip()
+        token = wiz.secret(u["token"]).strip()
         if not TOKEN_RE.fullmatch(token):
-            wiz.say("This does not look like a bot token (digits, a colon, letters).")
+            wiz.say(u["not_token"])
             continue
         try:
             me = wiz.api("getMe", {}, token, 15)
         except urllib.error.HTTPError:
-            wiz.say("Telegram did not accept this token.")
+            wiz.say(u["rejected"])
             continue
         except OSError as exc:  # no network: the reason never contains the URL (and so the token)
             raise SetupError("Could not reach api.telegram.org: %s" % getattr(exc, "reason", exc.__class__.__name__))
         username = ((me or {}).get("result") or {}).get("username")
         if not username:
-            wiz.say("Telegram did not accept this token.")
+            wiz.say(u["rejected"])
             continue
         wiz.token, wiz.facts["bot"] = token, username
         wiz.env["BOT_TOKEN"] = token
-        wiz.say("Bot @%s found." % username)
+        wiz.say(u["found"] % username)
         return
     raise SetupError("No valid token — run the setup again when you have it.")
 
 
 def step_owner(wiz):
     """The owner is whoever sends the bot a private message now and confirms it here."""
+    u = UI[wiz.ui]
     offset = wiz.skip_backlog()
-    wiz.say("Now open @%s in Telegram and send it any message (waiting up to %d minutes)…"
-            % (wiz.facts.get("bot", "your bot"), wiz.wait // 60))
+    wiz.say(u["send"] % (wiz.facts.get("bot", "your bot"), wiz.wait // 60))
     deadline = wiz.clock() + wiz.wait
     while wiz.clock() < deadline:
         poll = int(max(1, min(POLL_SECONDS, deadline - wiz.clock())))
@@ -153,28 +194,26 @@ def step_owner(wiz):
             chat = msg.get("chat") if isinstance(msg.get("chat"), dict) else {}
             if chat.get("type") != "private" or user.get("is_bot") or not isinstance(user.get("id"), int):
                 continue
-            wiz.say("Message from %s." % describe_user(user))
-            if wiz.confirm("Is this you? [y/N] "):
+            wiz.say(u["from"] % describe_user(user))
+            if wiz.confirm(u["is_you"]):
                 wiz.facts["owner"] = user
                 wiz.env["OWNER_IDS"] = str(user["id"])
-                wiz.env["LANG"] = "ru" if str(user.get("language_code") or "").lower().startswith("ru") else "en"
+                wiz.env["LANG"] = bot_lang(user.get("language_code"))
                 wiz.acknowledge(offset)
                 return
     if offset:
         wiz.acknowledge(offset)
-    wiz.say("No message arrived in time. You can type your numeric Telegram id instead "
-            "(@userinfobot tells it); an empty answer stops the setup.")
-    owner = wiz.question("Your Telegram id: ", check=lambda v: v.isdigit(), retry="The id is a number.")
+    wiz.say(u["late"])
+    owner = wiz.question(u["id"], check=lambda v: v.isdigit(), retry=u["id_bad"])
     if not owner:
         raise SetupError("Setup stopped: no owner.")
     wiz.env["OWNER_IDS"] = owner
-    wiz.env["LANG"] = wiz.question("Language of the bot's messages [en/ru] (en): ", default="en",
-                                   check=lambda v: v in ("en", "ru"), retry="en or ru.")
+    wiz.env["LANG"] = wiz.question(u["lang"], default=wiz.ui, check=lambda v: v in BOT_LANGS, retry=u["lang_bad"])
 
 
 def step_persona(wiz):
     """The bot's name and how it addresses the owner (default: their Telegram first name)."""
-    t = TEXTS.get(wiz.env.get("LANG"), TEXTS["en"])
+    t = TEXTS[wiz.ui]
     name = wiz.question(t["setup_name"], default=DEFAULT_NAME, check=clean_name, retry=t["setup_name_bad"])
     wiz.env["NAME"] = clean_name(name) or DEFAULT_NAME
     default = clean_name(str((wiz.facts.get("owner") or {}).get("first_name") or "")) or ""
@@ -203,7 +242,7 @@ def server_tz(environ=os.environ, localtime="/etc/localtime", timezone_file="/et
 
 def step_tz(wiz):
     """TZ for reminders, /at HH:MM, daily jobs and the brief; Enter = the server's zone."""
-    t = TEXTS.get(wiz.env.get("LANG"), TEXTS["en"])
+    t = TEXTS[wiz.ui]
     default = wiz.facts.get("server_tz", server_tz()) or "UTC"
     value = wiz.question(t["setup_tz"].format(default=default), default=default,
                          check=lambda v: zone(v) is not None, retry=t["setup_tz_bad"])
@@ -212,7 +251,7 @@ def step_tz(wiz):
 
 def step_brief(wiz):
     """The morning brief is opt-in; Enter on the time = 09:00."""
-    t = TEXTS.get(wiz.env.get("LANG"), TEXTS["en"])
+    t = TEXTS[wiz.ui]
     if wiz.confirm(t["setup_brief"]):
         value = wiz.question(t["setup_brief_time"], default="09:00", check=clock_text, retry=t["setup_brief_bad"])
         wiz.env["BRIEF"] = clock_text(value) or "09:00"
@@ -238,7 +277,7 @@ def step_voice(wiz):
     examples/voice/transcribe.py."""
     if not wiz.has_module("faster_whisper"):
         return
-    t = TEXTS.get(wiz.env.get("LANG"), TEXTS["en"])
+    t = TEXTS[wiz.ui]
     if not wiz.confirm(t["setup_voice"]):
         return
     lang = wiz.env.get("LANG", "en")
@@ -269,7 +308,7 @@ def step_servers(wiz):
     hosts = servers.ssh_config_hosts(wiz.ssh_config)
     if not hosts:
         return
-    t = TEXTS.get(wiz.env.get("LANG"), TEXTS["en"])
+    t = TEXTS[wiz.ui]
     wiz.say(t["setup_ssh_hosts"].format(hosts="\n".join("  %d. %s" % (i, h) for i, h in enumerate(hosts, 1))))
     picks = parse_picks(wiz.question(t["setup_ssh_pick"], default="", check=lambda v: parse_picks(v, len(hosts)) is not None,
                                      retry=t["setup_ssh_bad"]), len(hosts)) or []
@@ -287,6 +326,7 @@ class Setup:
         self.clock, self.sleep, self.force, self.wait, self.has_module = clock, sleep, force, wait, has_module
         self.ssh_config = ssh_config or os.path.expanduser("~/.ssh/config")
         self.env, self.facts, self.token = {}, {}, ""
+        self.ui = ui_lang()
 
     def question(self, prompt, default="", check=None, retry="Please try again."):
         """One line of input; Enter gives `default`; `check(value)` False asks again (three times)."""
@@ -338,7 +378,7 @@ class Setup:
         for step in self.steps:
             step(self)
         self.write(env_path)
-        self.say("Saved %s (owner id %s, language %s)." % (env_path, self.env.get("OWNER_IDS"), self.env.get("LANG")))
+        self.say(UI[self.ui]["saved"] % (env_path, self.env.get("OWNER_IDS"), self.env.get("LANG")))
         return env_path
 
     def write(self, env_path):
@@ -351,5 +391,5 @@ class Setup:
         write_private(env_path, "\n".join(lines) + "\n" + tail)
         if self.facts.get("servers"):
             servers.write(self.conf, self.facts["servers"])
-            t = TEXTS.get(self.env.get("LANG"), TEXTS["en"])
+            t = TEXTS[self.ui]
             self.say(t["setup_ssh_saved"].format(path=os.path.join(self.conf, servers.FILE), n=len(self.facts["servers"])))
