@@ -1,5 +1,7 @@
 # VPS Director
 
+[![tests](https://github.com/mikhailsemenovykh18-rgb/vps-director/actions/workflows/tests.yml/badge.svg)](https://github.com/mikhailsemenovykh18-rgb/vps-director/actions/workflows/tests.yml) [![release](https://img.shields.io/github/v/release/mikhailsemenovykh18-rgb/vps-director)](https://github.com/mikhailsemenovykh18-rgb/vps-director/releases) [![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 **Your servers, in your pocket.** A Telegram bot and Mini App that run on your VPS: they watch your
 servers, sites and backups without any AI, open a real terminal on any of them from your phone, and
 hand every task you write to **Claude Code** or **Codex** on the subscription you already pay for.
